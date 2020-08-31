@@ -28,6 +28,10 @@ const store = SubX.proxy<StoreType>({
       scopes: ['Calendars.ReadWrite'],
     });
     console.log(loginResponse);
+    const tokenResponse = await userAgentApplication.acquireTokenSilent({
+      scopes: ['Calendars.ReadWrite'],
+    });
+    console.log(tokenResponse);
   },
 });
 
