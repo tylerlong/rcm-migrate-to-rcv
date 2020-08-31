@@ -1,10 +1,13 @@
 {
   "extends": "./node_modules/gts/tsconfig-google.json",
   "compilerOptions": {
-    "outDir": "build"
+    "outDir": "build",
+    "esModuleInterop": true,
+    "jsx": "react",
+    "lib": ["DOM"]
   },
   "include": [
-    "src/*.ts",
     "src/*.tsx",
+    "src/*.ts"
   ]
 }
