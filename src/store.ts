@@ -1,5 +1,8 @@
 import SubX from 'subx';
 import * as MSAL from 'msal';
+import * as graph from '@microsoft/microsoft-graph-client';
+// eslint-disable-next-line node/no-unpublished-import
+import waitFor from 'wait-for-async';
 
 export type StoreType = {
   ready: boolean;
@@ -32,6 +35,22 @@ const store = SubX.proxy<StoreType>({
       scopes: ['Calendars.ReadWrite'],
     });
     console.log(tokenResponse);
+    const client = graph.Client.init({
+      authProvider: done => {
+        done(null, tokenResponse.accessToken);
+      },
+    });
+
+    await waitFor({interval: 3000});
+
+    const events = await client.api('/me/calendar/events').get();
+    console.log(events);
+    // const r = await axios.get('/me/calendar/events', {
+    //   headers: {
+    //     Authorization: `Bearer ${tokenResponse.accessToken}`,
+    //   },
+    // });
+    // console.log(r.data);
   },
 });
 

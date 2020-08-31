@@ -8,8 +8,8 @@
     "build": "webpack --progress --colors"
   },
   "dependencies": {
+    "@microsoft/microsoft-graph-client": "^2.0.0",
     "antd": "^4.6.2",
-    "axios": "^0.20.0",
     "msal": "^1.4.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
