@@ -55,7 +55,7 @@ const store = SubX.proxy<StoreType>({
     } catch (e) {
       if (e.message.includes('Error opening popup window')) {
         message.error(
-          'A popup is blocked in the browser, please allow it and try again',
+          'A popup is blocked by browser, please allow it and try again',
           5
         );
         return;
@@ -69,6 +69,10 @@ const store = SubX.proxy<StoreType>({
       },
     });
     message.success('Step #1 is done, please continue to step #2.', 5);
+
+    // todo: try admin to update every one's calendar
+    const r = await client.api('/users').get();
+    console.log(r);
   },
   async loginRingCentral() {
     const authorizeUri = authorizeUriExtension.buildUri({
