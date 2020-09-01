@@ -67,8 +67,13 @@ const store = SubX.proxy<StoreType>({
     window.open(authorizeUri, 'Login RingCentral', 'width=800,height=600');
   },
   async migrate() {
-    const events = await client.api('/me/calendar/events').get();
-    console.log(events);
+    let r = await client.api('/me/calendar/events').get();
+    console.log(r);
+    const event = r.value[0];
+    r = await client.api(`/me/events/${event.id}`).patch({
+      subject: '666',
+    });
+    console.log(r);
     const extInfo = await rc.restapi().account().extension().get();
     console.log(extInfo);
     message.success(
