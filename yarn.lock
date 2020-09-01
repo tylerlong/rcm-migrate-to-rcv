@@ -6303,11 +6303,6 @@ vm-browserify@^1.0.1:
   resolved "https://registry.yarnpkg.com/vm-browserify/-/vm-browserify-1.1.2.tgz#78641c488b8e6ca91a75f511e7a3b32a86e5dda0"
   integrity sha512-2ham8XPWTONajOR0ohOKOHXkm3+gaBmGut3SRuu75xLd/RRaY6vqgh8NBYYk7+RW3u5AtzPQZG8F10LHkl0lAQ==
 
-wait-for-async@^0.5.0:
-  version "0.5.0"
-  resolved "https://registry.yarnpkg.com/wait-for-async/-/wait-for-async-0.5.0.tgz#632b0262e8997e6fd4f0dea64a612f23a1380916"
-  integrity sha512-fyPjbUCgqNlOBZBV/VscFz3GlqOpFwnsp5mo61BbiXgUfPKUSw3U+hx1n5o65fu6GpfzrSB0KN6P8+O5KCFXtw==
-
 warning@^4.0.1, warning@^4.0.3:
   version "4.0.3"
   resolved "https://registry.yarnpkg.com/warning/-/warning-4.0.3.tgz#16e9e077eb8a86d6af7d64aa1e05fd85b4678ca3"
