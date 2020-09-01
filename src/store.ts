@@ -67,15 +67,28 @@ const store = SubX.proxy<StoreType>({
     window.open(authorizeUri, 'Login RingCentral', 'width=800,height=600');
   },
   async migrate() {
-    let r = await client.api('/me/calendar/events').get();
-    console.log(r);
-    const event = r.value[0];
-    r = await client.api(`/me/events/${event.id}`).patch({
-      subject: '666',
-    });
-    console.log(r);
-    const extInfo = await rc.restapi().account().extension().get();
-    console.log(extInfo);
+    const defaultMeeting = (
+      await rc.get('/rcvideo/v1/bridges', {default: true})
+    ).data;
+    console.log(defaultMeeting);
+
+    const events = (await client.api('/me/calendar/events').get()).value;
+    for (const event of events) {
+      const match = event.bodyPreview.match(
+        /https:\/\/meetings\.ringcentral\.com\/j\/\d+/
+      );
+      if (match === null) {
+        continue;
+      }
+      const rcmUri = match[0];
+      console.log(rcmUri);
+      await client.api(`/me/events/${event.id}`).patch({
+        body: {
+          content: event.bodyPreview.replace(rcmUri, defaultMeeting.joinUri),
+          contentType: 'text',
+        },
+      });
+    }
     message.success(
       'Congratulations, migration is done, please check your Outlook Calendar.',
       5
