@@ -7,7 +7,8 @@ export type StoreType = {
   ready: boolean;
   init: Function;
   load: Function;
-  login: Function;
+  loginMicrosoft: Function;
+  loginRingCentral: Function;
   migrate: Function;
 };
 
@@ -32,7 +33,7 @@ const store = SubX.proxy<StoreType>({
   ready: false,
   init() {},
   load() {},
-  async login() {
+  async loginMicrosoft() {
     await userAgentApplication.loginPopup(authenticationParams);
     const tokenResponse = await userAgentApplication.acquireTokenSilent(
       authenticationParams
@@ -43,6 +44,10 @@ const store = SubX.proxy<StoreType>({
       },
     });
     message.success('Step #1 is done, please continue to step #2.', 5);
+  },
+  async loginRingCentral() {
+    console.log('Login RingCentral');
+    message.success('Step #2 is done, please continue to step #3.', 5);
   },
   async migrate() {
     const events = await client.api('/me/calendar/events').get();
