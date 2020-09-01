@@ -9,7 +9,10 @@
   },
   "dependencies": {
     "@microsoft/microsoft-graph-client": "^2.0.0",
+    "@rc-ex/authorize-uri": "^0.5.4",
+    "@rc-ex/core": "^0.5.4",
     "antd": "^4.6.2",
+    "localforage": "^1.9.0",
     "msal": "^1.4.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
