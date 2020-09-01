@@ -1,6 +1,7 @@
 import SubX from 'subx';
 import * as MSAL from 'msal';
 import * as graph from '@microsoft/microsoft-graph-client';
+import {message} from 'antd';
 
 export type StoreType = {
   ready: boolean;
@@ -23,26 +24,33 @@ const userAgentApplication = new MSAL.UserAgentApplication({
   },
 });
 
+const authenticationParams = {
+  scopes: ['Calendars.ReadWrite'],
+};
+
 const store = SubX.proxy<StoreType>({
   ready: false,
   init() {},
   load() {},
   async login() {
-    await userAgentApplication.loginPopup({
-      scopes: ['Calendars.ReadWrite'],
-    });
-    const tokenResponse = await userAgentApplication.acquireTokenSilent({
-      scopes: ['Calendars.ReadWrite'],
-    });
+    await userAgentApplication.loginPopup(authenticationParams);
+    const tokenResponse = await userAgentApplication.acquireTokenSilent(
+      authenticationParams
+    );
     client = graph.Client.init({
       authProvider: done => {
         done(null, tokenResponse.accessToken);
       },
     });
+    message.success('Step #1 is done, please continue to step #2.', 5);
   },
   async migrate() {
     const events = await client.api('/me/calendar/events').get();
     console.log(events);
+    message.success(
+      'Congratulations, migration is done, please check your Outlook Calendar.',
+      5
+    );
   },
 });
 
