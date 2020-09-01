@@ -47,9 +47,22 @@ const store = SubX.proxy<StoreType>({
   isMainWindow: true,
   async loginMicrosoft() {
     await userAgentApplication.loginPopup(authenticationParams);
-    const tokenResponse = await userAgentApplication.acquireTokenSilent(
-      authenticationParams
-    );
+    let tokenResponse: MSAL.AuthResponse;
+    try {
+      tokenResponse = await userAgentApplication.acquireTokenPopup(
+        authenticationParams
+      );
+    } catch (e) {
+      if (e.message.includes('Error opening popup window')) {
+        message.error(
+          'A popup is blocked in the browser, please allow it and try again',
+          5
+        );
+        return;
+      } else {
+        throw e;
+      }
+    }
     client = graph.Client.init({
       authProvider: done => {
         done(null, tokenResponse.accessToken);
