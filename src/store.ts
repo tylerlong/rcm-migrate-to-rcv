@@ -70,22 +70,31 @@ const store = SubX.proxy<StoreType>({
     const defaultMeeting = (
       await rc.get('/rcvideo/v1/bridges', {default: true})
     ).data;
-    console.log(defaultMeeting);
-
     const events = (await client.api('/me/calendar/events').get()).value;
-    for (const event of events) {
-      const match = event.bodyPreview.match(
+    for (const event of events.filter((e: any) => e.isOrganizer)) {
+      let match = event.bodyPreview.match(
         /https:\/\/meetings\.ringcentral\.com\/j\/\d+/
       );
       if (match === null) {
-        continue;
+        match = event.location.displayName.match(
+          /https:\/\/meetings\.ringcentral\.com\/j\/\d+/
+        );
+        if (match === null) {
+          continue;
+        }
       }
       const rcmUri = match[0];
-      console.log(rcmUri);
       await client.api(`/me/events/${event.id}`).patch({
         body: {
           content: event.bodyPreview.replace(rcmUri, defaultMeeting.joinUri),
           contentType: 'text',
+        },
+        location: {
+          displayName: event.location.displayName.replace(
+            rcmUri,
+            defaultMeeting.joinUri
+          ),
+          locationType: 'default',
         },
       });
     }
