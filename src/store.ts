@@ -19,12 +19,6 @@ const rc = new RingCentral({
 
 const authorizeUriExtension = new AuthorizeUriExtension();
 rc.installExtension(authorizeUriExtension);
-const authorizeUri = authorizeUriExtension.buildUri({
-  redirect_uri: redirectUri,
-  code_challenge_method: 'S256',
-});
-const codeVerifier = authorizeUriExtension.codeVerifier;
-localforage.setItem('code_verifier', codeVerifier);
 
 let client: graph.Client;
 
@@ -64,6 +58,12 @@ const store = SubX.proxy<StoreType>({
     message.success('Step #1 is done, please continue to step #2.', 5);
   },
   async loginRingCentral() {
+    const authorizeUri = authorizeUriExtension.buildUri({
+      redirect_uri: redirectUri,
+      code_challenge_method: 'S256',
+    });
+    const codeVerifier = authorizeUriExtension.codeVerifier;
+    await localforage.setItem('code_verifier', codeVerifier);
     window.open(authorizeUri, 'Login RingCentral', 'width=800,height=600');
   },
   async migrate() {
