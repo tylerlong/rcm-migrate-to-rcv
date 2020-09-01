@@ -12,3 +12,8 @@ It replaces `https://meetings.ringcentral.com/j/123456` with `https://v.ringcent
 3. The app will update the events found in step #1 and replace all RCM links in body or location with your default RCV meeting link
 4. Outlook will update all meeting participants.
 5. All your meetings are migrated from RCM to RCV.
+
+
+## A video introduction
+
+https://youtu.be/nQWFO5Jzp6U
