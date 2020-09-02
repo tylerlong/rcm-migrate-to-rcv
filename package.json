@@ -4,6 +4,7 @@
     "node": ">=10"
   },
   "scripts": {
+    "test": "ts-node src/google/index.ts",
     "start": "webpack-dev-server --progress --colors",
     "build": "webpack --progress --colors"
   },
@@ -12,6 +13,7 @@
     "@rc-ex/authorize-uri": "^0.5.4",
     "@rc-ex/core": "^0.5.4",
     "antd": "^4.6.2",
+    "googleapis": "39",
     "localforage": "^1.9.0",
     "msal": "^1.4.0",
     "react": "^16.13.1",
