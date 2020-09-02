@@ -17,3 +17,8 @@ It replaces `https://meetings.ringcentral.com/j/123456` with `https://v.ringcent
 ## A video introduction
 
 https://youtu.be/nQWFO5Jzp6U
+
+
+## Notes
+
+- https://developers.google.com/identity/protocols/oauth2/service-account
