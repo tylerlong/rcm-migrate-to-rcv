@@ -22,3 +22,6 @@ https://youtu.be/nQWFO5Jzp6U
 ## Notes
 
 - https://developers.google.com/identity/protocols/oauth2/service-account
+- https://docs.microsoft.com/en-us/microsoft-365/admin/add-users/give-mailbox-permissions-to-another-user?view=o365-worldwide
+- https://stackoverflow.com/questions/43240591/cant-access-microsoft-graph-users-calendars-403
+- https://docs.microsoft.com/en-us/graph/auth-v2-service
