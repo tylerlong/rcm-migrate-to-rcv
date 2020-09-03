@@ -34,7 +34,7 @@ const userAgentApplication = new MSAL.UserAgentApplication({
 });
 
 const authenticationParams = {
-  scopes: ['Calendars.ReadWrite'],
+  scopes: ['Calendars.ReadWrite', 'User.Read.All'],
 };
 
 export type StoreType = {
