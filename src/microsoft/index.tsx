@@ -1,5 +1,10 @@
+import '../index.css';
+
 import axios from 'axios';
 import qs from 'qs';
+import ReactDOM from 'react-dom';
+import React from 'react';
+import {Spin} from 'antd';
 
 const urlSearchParams = new URLSearchParams(
   new URL(window.location.href).search
@@ -29,3 +34,7 @@ const tenant = urlSearchParams.get('tenant');
   );
   window.close();
 })();
+
+const container = document.createElement('div');
+document.body.appendChild(container);
+ReactDOM.render(<Spin size="large" />, container);
