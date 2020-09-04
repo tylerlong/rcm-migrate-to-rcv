@@ -66,11 +66,8 @@ const store = SubX.proxy<StoreType>({
     });
   },
   async migrate() {
-    const defaultMeeting = (
-      await rc.get('/rcvideo/v1/bridges', {default: true})
-    ).data;
-
     let r = await client.api('/users').get();
+    console.log(r);
     for (const user of r.value) {
       r = await client
         .api(`/users/${user.userPrincipalName}/calendar/events`)
@@ -92,20 +89,23 @@ const store = SubX.proxy<StoreType>({
           }
         }
         const rcmUri = match[0];
+        const meeting = (
+          await rc.post('/rcvideo/v1/bridges', {
+            expiresIn: 3600 * 24 * 365,
+            type: 0,
+          })
+        ).data;
         await client
           .api(`/users/${user.userPrincipalName}/calendar/events/${event.id}`)
           .patch({
             body: {
-              content: event.bodyPreview.replace(
-                rcmUri,
-                defaultMeeting.joinUri
-              ),
+              content: event.bodyPreview.replace(rcmUri, meeting.joinUri),
               contentType: 'text',
             },
             location: {
               displayName: event.location.displayName.replace(
                 rcmUri,
-                defaultMeeting.joinUri
+                meeting.joinUri
               ),
               locationType: 'default',
             },

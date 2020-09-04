@@ -20,8 +20,15 @@ It replaces `https://meetings.ringcentral.com/j/123456` with `https://v.ringcent
 
 ### New RCV meetings all have the same host user
 
-New RCV meetings all have the same host user: the RingCentral user authorized this app. 
+New RCV meetings all have the same host user: the RingCentral user authorized into this app. 
 This is because: given an outlook user, there is no reliable way to map it to a RingCentral user.
+This app works even if the outlook user doesn't have RingCentral account at all. (as long as he borrow a RingCentral account somewhere he can run this app)
+
+
+### Dial in numbers not updated
+
+Some RCM meetings allow you to join by phone call. The phone numbers to join meeting are not updated.
+I believe it could be done. More development and testing are needed.
 
 
 ## A video introduction
