@@ -1,81 +1,70 @@
 /* eslint-disable node/no-unpublished-import */
 import HtmlWebpackPlugin from 'html-webpack-plugin';
-import webpack from 'webpack';
 import path from 'path';
 import dotenv from 'dotenv-override-true';
 import {DefinePlugin} from 'webpack';
 
-const mainConfig: webpack.Configuration = {
-  mode: 'development',
-  devtool: 'source-map',
-  entry: './src/index.tsx',
-  output: {
-    path: path.resolve(__dirname, 'docs'),
-    filename: 'index.js',
-  },
-  module: {
-    rules: [
-      {
-        test: /\.tsx?$/,
-        exclude: /node_modules/,
-        use: {
-          loader: 'ts-loader',
-        },
-      },
-      {
-        test: /\.css$/,
-        use: ['style-loader', 'css-loader'],
-      },
-    ],
-  },
-  plugins: [
-    new HtmlWebpackPlugin({
-      title: 'RCM migrate to RCV',
-    }),
-    new DefinePlugin({
-      'process.env': JSON.stringify(dotenv.config().parsed),
-    }),
-  ],
-  resolve: {
-    extensions: ['.ts', '.tsx', '.js'],
-  },
+type ConfigOptions = {
+  fileName: string;
+  pageTitle: string;
+  entryFile: string;
 };
 
-const microsoftConfig: webpack.Configuration = {
-  mode: 'development',
-  devtool: 'source-map',
-  entry: './src/microsoft/index.tsx',
-  output: {
-    path: path.resolve(__dirname, 'docs'),
-    filename: 'microsoft.js',
-  },
-  module: {
-    rules: [
-      {
-        test: /\.tsx?$/,
-        exclude: /node_modules/,
-        use: {
-          loader: 'ts-loader',
+const createConfig = (configOptions: ConfigOptions) => {
+  return {
+    mode: 'development',
+    devtool: 'source-map',
+    entry: configOptions.entryFile,
+    output: {
+      path: path.resolve(__dirname, 'docs'),
+      filename: `${configOptions.fileName}.js`,
+    },
+    module: {
+      rules: [
+        {
+          test: /\.tsx?$/,
+          exclude: /node_modules/,
+          use: {
+            loader: 'ts-loader',
+          },
         },
-      },
-      {
-        test: /\.css$/,
-        use: ['style-loader', 'css-loader'],
-      },
+        {
+          test: /\.css$/,
+          use: ['style-loader', 'css-loader'],
+        },
+      ],
+    },
+    plugins: [
+      new HtmlWebpackPlugin({
+        title: configOptions.pageTitle,
+        filename: `${configOptions.fileName}.html`,
+      }),
+      new DefinePlugin({
+        'process.env': JSON.stringify(dotenv.config().parsed),
+      }),
     ],
-  },
-  plugins: [
-    new HtmlWebpackPlugin({
-      title: 'Authorize to access Microsoft',
-      filename: 'microsoft.html',
-    }),
-    new DefinePlugin({
-      'process.env': JSON.stringify(dotenv.config().parsed),
-    }),
-  ],
-  resolve: {
-    extensions: ['.ts', '.tsx', '.js'],
-  },
+    resolve: {
+      extensions: ['.ts', '.tsx', '.js'],
+    },
+  };
 };
 
-export default [mainConfig, microsoftConfig];
+const mainConfig = createConfig({
+  fileName: 'index',
+  pageTitle: 'RCM migrate to RCV',
+  entryFile: './src/index.tsx',
+});
+
+const microsoftConfig = createConfig({
+  fileName: 'microsoft',
+  pageTitle: 'Authorize to access Microsoft',
+  entryFile: './src/microsoft/index.tsx',
+});
+
+const ringcentralConfig = createConfig({
+  fileName: 'ringcentral',
+  pageTitle: 'Authorize to access RingCentral',
+  entryFile: './src/ringcentral/index.tsx',
+});
+
+export default [mainConfig, microsoftConfig, ringcentralConfig];
