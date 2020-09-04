@@ -46,15 +46,12 @@ const store = SubX.proxy<StoreType>({
         );
         return;
       } else if (e.data.message === 'msAuthorizeSuccess') {
-        console.log(e.data.accessToken);
         client = graph.Client.init({
           authProvider: done => {
             done(null, e.data.accessToken);
           },
         });
         message.success('Step #1 is done, please continue to step #2.', 5);
-        const r = await client.api('/users').get();
-        console.log(r);
       }
     });
   },
@@ -71,38 +68,51 @@ const store = SubX.proxy<StoreType>({
     const defaultMeeting = (
       await rc.get('/rcvideo/v1/bridges', {default: true})
     ).data;
-    const events = (await client.api('/me/calendar/events').get()).value;
-    for (const event of events.filter(
-      (e: {isOrganizer: boolean}) => e.isOrganizer
-    )) {
-      let match = event.bodyPreview.match(
-        /https:\/\/meetings\.ringcentral\.com\/j\/\d+/
+
+    let r = await client.api('/users').get();
+    for (const user of r.value) {
+      r = await client
+        .api(`/users/${user.userPrincipalName}/calendar/events`)
+        .get();
+      console.log(r);
+      const events = r.value.filter(
+        (e: {isOrganizer: boolean}) => e.isOrganizer
       );
-      if (match === null) {
-        match = event.location.displayName.match(
+      for (const event of events) {
+        let match = event.bodyPreview.match(
           /https:\/\/meetings\.ringcentral\.com\/j\/\d+/
         );
         if (match === null) {
-          continue;
+          match = event.location.displayName.match(
+            /https:\/\/meetings\.ringcentral\.com\/j\/\d+/
+          );
+          if (match === null) {
+            continue;
+          }
         }
+        const rcmUri = match[0];
+        await client
+          .api(`/users/${user.userPrincipalName}/calendar/events/${event.id}`)
+          .patch({
+            body: {
+              content: event.bodyPreview.replace(
+                rcmUri,
+                defaultMeeting.joinUri
+              ),
+              contentType: 'text',
+            },
+            location: {
+              displayName: event.location.displayName.replace(
+                rcmUri,
+                defaultMeeting.joinUri
+              ),
+              locationType: 'default',
+            },
+          });
       }
-      const rcmUri = match[0];
-      await client.api(`/me/events/${event.id}`).patch({
-        body: {
-          content: event.bodyPreview.replace(rcmUri, defaultMeeting.joinUri),
-          contentType: 'text',
-        },
-        location: {
-          displayName: event.location.displayName.replace(
-            rcmUri,
-            defaultMeeting.joinUri
-          ),
-          locationType: 'default',
-        },
-      });
     }
     message.success(
-      'Congratulations, migration is done, please check your Outlook Calendar.',
+      'Congratulations, migration is done, please check Outlook calendars.',
       5
     );
   },
