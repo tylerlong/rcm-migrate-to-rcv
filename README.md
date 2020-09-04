@@ -7,11 +7,21 @@ It replaces `https://meetings.ringcentral.com/j/123456` with `https://v.ringcent
 
 ## How it works
 
-1. The app will go through your Outlook calendar and find all events which you are the organizer.
-2. The app will invoke RingCentral API to get your **default RCV meeting link**.
-3. The app will update the events found in step #1 and replace all RCM links in body or location with your default RCV meeting link
-4. Outlook will update all meeting participants.
-5. All your meetings are migrated from RCM to RCV.
+1. The app will get the list of all Office 365 users
+1. For each office 365 user from last step, check his/her calendar to find events with him/her as organizer
+    1. The app only updates events as organizer, Outlook will update all participants automatically.
+1. For each event from last step, check its body and location field for RCM links
+1. If RCM links are found, a new RCV meeting will be scheduled
+1. Update the event to replace RCM links with RCV links from last step.
+1. Outlook will sync all meetings participants.
+
+
+## Known issues
+
+### New RCV meetings all have the same host user
+
+New RCV meetings all have the same host user: the RingCentral user authorized this app. 
+This is because: given an outlook user, there is no reliable way to map it to a RingCentral user.
 
 
 ## A video introduction
@@ -19,9 +29,13 @@ It replaces `https://meetings.ringcentral.com/j/123456` with `https://v.ringcent
 https://youtu.be/nQWFO5Jzp6U
 
 
-## Notes
+## Technical Reference
 
-- https://developers.google.com/identity/protocols/oauth2/service-account
-- https://docs.microsoft.com/en-us/microsoft-365/admin/add-users/give-mailbox-permissions-to-another-user?view=o365-worldwide
 - https://stackoverflow.com/questions/43240591/cant-access-microsoft-graph-users-calendars-403
 - https://docs.microsoft.com/en-us/graph/auth-v2-service
+- https://developers.google.com/identity/protocols/oauth2/service-account
+
+
+## Todo
+
+- Support Google calendar in addition to Outlook calendar.
