@@ -38,9 +38,12 @@ https://youtu.be/nQWFO5Jzp6U
 
 ## Technical Reference
 
-- https://stackoverflow.com/questions/43240591/cant-access-microsoft-graph-users-calendars-403
-- https://docs.microsoft.com/en-us/graph/auth-v2-service
-- https://developers.google.com/identity/protocols/oauth2/service-account
+- Microsoft
+    - https://docs.microsoft.com/en-us/graph/auth-v2-service
+- Google
+    - https://stackoverflow.com/questions/21655774/can-i-access-other-google-users-calendars-through-the-google-api-v3
+    - https://developers.google.com/identity/protocols/oauth2/service-account
+    - https://developers.google.com/admin-sdk/directory/v1/reference/users/list
 
 
 ## Todo
