@@ -1,6 +1,6 @@
 import React from 'react';
 import {Component} from 'react-subx';
-import {Button, Divider, Spin} from 'antd';
+import {Button, Divider} from 'antd';
 
 import {StoreType} from './store';
 
@@ -9,13 +9,6 @@ type PropsStore = {
 };
 
 class App extends Component<PropsStore> {
-  render() {
-    const store = this.props.store;
-    return store.isMainWindow ? <Main store={store} /> : <Spin size="large" />;
-  }
-}
-
-class Main extends Component<PropsStore> {
   render() {
     const store = this.props.store;
     return (

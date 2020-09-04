@@ -1,1 +1,3 @@
 --ignore-dir=docs
+--ignore-dir=build
+
