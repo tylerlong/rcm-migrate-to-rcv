@@ -34,9 +34,12 @@ const store = SubX.proxy<StoreType>({
     window.open(authorizeUri, 'Login Microsoft', 'width=800,height=600');
     window.addEventListener('message', async e => {
       if (e.data.message === 'msAuthorizeFailure') {
-        message.error(
-          'Authorization to access Office 365 account failed, please make sure you have admin permission!'
-        );
+        let errorMessage =
+          'Authorization to access Office 365 account failed, please make sure you have admin permission!';
+        if (e.data.error) {
+          errorMessage = `${e.data.error}: ${e.data.errorDescription}`;
+        }
+        message.error(errorMessage, 300);
         return;
       } else if (e.data.message === 'msAuthorizeSuccess') {
         client = graph.Client.init({

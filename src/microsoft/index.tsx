@@ -10,9 +10,11 @@ const urlSearchParams = new URLSearchParams(
   new URL(window.location.href).search
 );
 const adminConsent = urlSearchParams.get('admin_consent');
-if (adminConsent !== 'True') {
+const error = urlSearchParams.get('error');
+const errorDescription = urlSearchParams.get('error_description');
+if (adminConsent !== 'True' || error !== null) {
   (window.opener as Window).postMessage(
-    {message: 'msAuthorizeFailure'},
+    {message: 'msAuthorizeFailure', error, errorDescription},
     window.location.origin
   );
   window.close();
