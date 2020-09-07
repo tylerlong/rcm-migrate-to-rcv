@@ -1,7 +1,7 @@
 {
   "license": "MIT",
   "engines": {
-    "node": ">=10"
+    "node": ">=14"
   },
   "scripts": {
     "test": "ts-node src/google/index.ts",
@@ -10,9 +10,9 @@
   },
   "dependencies": {
     "@microsoft/microsoft-graph-client": "^2.0.0",
-    "@rc-ex/authorize-uri": "^0.5.4",
-    "@rc-ex/core": "^0.5.4",
-    "antd": "^4.6.2",
+    "@rc-ex/authorize-uri": "^0.5.5",
+    "@rc-ex/core": "^0.5.5",
+    "antd": "^4.6.3",
     "axios": "^0.20.0",
     "googleapis": "^59.0.0",
     "localforage": "^1.9.0",
@@ -24,7 +24,7 @@
     "urijs": "^1.19.2"
   },
   "devDependencies": {
-    "@types/node": "^14.6.3",
+    "@types/node": "^14.6.4",
     "@types/react-dom": "^16.9.8",
     "css-loader": "^4.2.2",
     "dotenv-override-true": "^6.2.1",
