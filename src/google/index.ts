@@ -1,5 +1,6 @@
 import {google} from 'googleapis';
 import path from 'path';
+import fs from 'fs';
 
 const scopes = [
   'https://www.googleapis.com/auth/admin.directory.user',
@@ -8,10 +9,17 @@ const scopes = [
 
 const rcmMeetingRegex = /https:\/\/meetings\.ringcentral\.com\/j\/\d+/;
 
+const credentials = JSON.parse(
+  fs.readFileSync(path.join(__dirname, 'service-account.json'), 'utf8')
+);
+
 const getGoogleAuth = (subject = 'tylerliu@chuntaoliu.com') => {
   return new google.auth.GoogleAuth({
-    keyFile: path.join(__dirname, 'service-account.json'),
     scopes,
+    credentials: {
+      client_email: credentials.client_email,
+      private_key: credentials.private_key,
+    },
     clientOptions: {subject},
   });
 };
