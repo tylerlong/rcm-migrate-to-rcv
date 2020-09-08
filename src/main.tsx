@@ -1,6 +1,6 @@
 import React from 'react';
 import {Component} from 'react-subx';
-import {Button, Divider, Steps} from 'antd';
+import {Button, Divider, Steps, Tabs} from 'antd';
 
 import {StoreType} from './store';
 
@@ -45,13 +45,26 @@ class CalendarAuthorization extends Component<PropsStore> {
   render() {
     const store = this.props.store;
     return (
-      <Button
-        onClick={() => store.loginMicrosoft()}
-        type="primary"
-        size="large"
-      >
-        Authorize this app to access your Outlook Calendar
-      </Button>
+      <Tabs>
+        <Tabs.TabPane tab="Outlook Calendar" key="outlook">
+          <Button
+            onClick={() => store.loginMicrosoft()}
+            type="primary"
+            size="large"
+          >
+            Login as Office 365 admin
+          </Button>
+        </Tabs.TabPane>
+        <Tabs.TabPane tab="Google Calendar" key="google">
+          <Button
+            onClick={() => store.loginMicrosoft()}
+            type="primary"
+            size="large"
+          >
+            Login as G Suite admin
+          </Button>
+        </Tabs.TabPane>
+      </Tabs>
     );
   }
 }
@@ -66,7 +79,7 @@ class RingCentralAuthorization extends Component<PropsStore> {
         size="large"
         className="middle-button"
       >
-        Authorize this app to access your RCV account.
+        Login as RingCentral user
       </Button>
     );
   }
@@ -86,7 +99,7 @@ class RcvMigration extends Component<PropsStore> {
         size="large"
         className="right-button"
       >
-        Migrate your RCM meetings to RCV meetings
+        Migrate RCM meetings to RCV meetings
       </Button>
     );
   }
