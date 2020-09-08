@@ -13,7 +13,22 @@ const tailLayout = {
 };
 
 const onFinish = (values: {adminEmail: string; keyFile: string}) => {
-  console.log('Success:', values);
+  const adminEmail = values.adminEmail;
+  const keyFile = (document.getElementById('keyFile') as HTMLInputElement)
+    .files![0];
+  const reader = new FileReader();
+  reader.onload = function (event) {
+    const keyJson = JSON.parse(event.target!.result as string);
+    const clientEmail = keyJson.client_email;
+    const privateKey = keyJson.private_key;
+    console.log(adminEmail, clientEmail, privateKey);
+    (window.opener as Window).postMessage(
+      {message: 'googleAuthorizeSuccess', adminEmail, clientEmail, privateKey},
+      window.location.origin
+    );
+    window.close();
+  };
+  reader.readAsText(keyFile);
 };
 
 class App extends React.Component {
@@ -58,7 +73,7 @@ class App extends React.Component {
             ]}
             extra="Follow instructions below to configure and generate the key file"
           >
-            <Input type="file" accept="application/json" />
+            <Input type="file" accept="application/json" id="keyFile" />
           </Form.Item>
 
           <Form.Item {...tailLayout}>

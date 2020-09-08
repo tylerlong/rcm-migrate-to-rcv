@@ -54,13 +54,26 @@ const store = SubX.proxy<StoreType>({
           },
         });
         window.focus();
-        message.success('Authorization to Calendar is done', 5);
+        message.success('Authorization to Outlook Calendar is done', 5);
         this.currentStep = 1;
       }
     });
   },
   async loginGoogle() {
-    window.open('./google.html', 'Login Google', 'width=800,height=600');
+    window.open(
+      redirectUri + 'google.html',
+      'Login Google',
+      'width=800,height=600'
+    );
+    window.addEventListener('message', async e => {
+      if (e.data.message === 'googleAuthorizeSuccess') {
+        const {adminEmail, clientEmail, privateKey} = e.data;
+        console.log(adminEmail, clientEmail, privateKey);
+        window.focus();
+        message.success('Authorization to Google Calendar is done', 5);
+        this.currentStep = 1;
+      }
+    });
   },
   async loginRingCentral() {
     const authorizeUri = authorizeUriExtension.buildUri({
