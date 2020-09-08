@@ -22,9 +22,9 @@ class App extends Component<PropsStore> {
         <Divider />
 
         <Steps current={store.currentStep}>
-          <Steps.Step title="Step 1" subTitle="Calendar Authorization" />
-          <Steps.Step title="Step 2" subTitle="RingCentral Authorization" />
-          <Steps.Step title="Step 3" subTitle="Migrate to RingCentral Video" />
+          <Steps.Step title="Calendar Authorization" />
+          <Steps.Step title="RingCentral Authorization" />
+          <Steps.Step title="Migrate to RCV" />
         </Steps>
 
         <Divider />
@@ -45,7 +45,11 @@ class CalendarAuthorization extends Component<PropsStore> {
   render() {
     const store = this.props.store;
     return (
-      <Button onClick={() => store.loginMicrosoft()} type="primary">
+      <Button
+        onClick={() => store.loginMicrosoft()}
+        type="primary"
+        size="large"
+      >
         Authorize this app to access your Outlook Calendar
       </Button>
     );
@@ -56,7 +60,12 @@ class RingCentralAuthorization extends Component<PropsStore> {
   render() {
     const store = this.props.store;
     return (
-      <Button onClick={() => store.loginRingCentral()} type="primary">
+      <Button
+        onClick={() => store.loginRingCentral()}
+        type="primary"
+        size="large"
+        className="middle-button"
+      >
         Authorize this app to access your RCV account.
       </Button>
     );
@@ -66,8 +75,17 @@ class RingCentralAuthorization extends Component<PropsStore> {
 class RcvMigration extends Component<PropsStore> {
   render() {
     const store = this.props.store;
-    return (
-      <Button onClick={() => store.migrate()} type="primary">
+    return store.done ? (
+      <Button onClick={() => store.restart()} block size="large">
+        Restart the migration wizard
+      </Button>
+    ) : (
+      <Button
+        onClick={() => store.migrate()}
+        type="primary"
+        size="large"
+        className="right-button"
+      >
         Migrate your RCM meetings to RCV meetings
       </Button>
     );

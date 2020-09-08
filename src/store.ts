@@ -18,13 +18,16 @@ rc.installExtension(authorizeUriExtension);
 let client: graph.Client;
 
 export type StoreType = {
+  currentStep: number;
+  done: boolean;
   loginMicrosoft: Function;
   loginRingCentral: Function;
   migrate: Function;
-  currentStep: number;
+  restart: Function;
 };
 const store = SubX.proxy<StoreType>({
   currentStep: 0,
+  done: false,
   async loginMicrosoft() {
     const authorizeUri = URI('https://login.microsoftonline.com')
       .directory('/common/adminconsent')
@@ -120,6 +123,11 @@ const store = SubX.proxy<StoreType>({
       }
     }
     message.success('Congratulations, migration is done.', 5);
+    this.done = true;
+  },
+  restart() {
+    this.currentStep = 0;
+    this.done = false;
   },
 });
 

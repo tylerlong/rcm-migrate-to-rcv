@@ -3,3 +3,13 @@
 body {
   padding: 16px;
 }
+
+.middle-button {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.right-button {
+  float: right;
+}
