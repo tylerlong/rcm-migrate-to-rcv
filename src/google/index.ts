@@ -30,7 +30,9 @@ const getGoogleAuth = (subject = 'tylerliu@chuntaoliu.com') => {
       version: 'directory_v1',
       auth: getGoogleAuth('tylerliu@chuntaoliu.com'),
     })
-    .users.list({domain: 'chuntaoliu.com'});
+    .users.list({
+      customer: 'my_customer',
+    });
   console.log(JSON.stringify(r1.data, null, 2));
 
   for (const user of r1.data.users ?? []) {

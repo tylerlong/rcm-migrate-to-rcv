@@ -49,3 +49,4 @@ https://youtu.be/nQWFO5Jzp6U
 ## Todo
 
 - Support Google calendar in addition to Outlook calendar.
+- Do not rely on external lambda service
