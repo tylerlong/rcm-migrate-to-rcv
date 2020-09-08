@@ -21,6 +21,7 @@ export type StoreType = {
   currentStep: number;
   done: boolean;
   loginMicrosoft: Function;
+  loginGoogle: Function;
   loginRingCentral: Function;
   migrate: Function;
   restart: Function;
@@ -57,6 +58,9 @@ const store = SubX.proxy<StoreType>({
         this.currentStep = 1;
       }
     });
+  },
+  async loginGoogle() {
+    window.open('./google.html', 'Login Google', 'width=800,height=600');
   },
   async loginRingCentral() {
     const authorizeUri = authorizeUriExtension.buildUri({

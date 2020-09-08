@@ -61,10 +61,16 @@ const microsoftConfig = createConfig({
   entryFile: './src/microsoft/index.tsx',
 });
 
+const googleConfig = createConfig({
+  fileName: 'google',
+  pageTitle: 'Authorize to access Google',
+  entryFile: './src/google/index.tsx',
+});
+
 const ringcentralConfig = createConfig({
   fileName: 'ringcentral',
   pageTitle: 'Authorize to access RingCentral',
   entryFile: './src/ringcentral/index.tsx',
 });
 
-export default [mainConfig, microsoftConfig, ringcentralConfig];
+export default [mainConfig, microsoftConfig, googleConfig, ringcentralConfig];

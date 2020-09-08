@@ -57,7 +57,7 @@ class CalendarAuthorization extends Component<PropsStore> {
         </Tabs.TabPane>
         <Tabs.TabPane tab="Google Calendar" key="google">
           <Button
-            onClick={() => store.loginMicrosoft()}
+            onClick={() => store.loginGoogle()}
             type="primary"
             size="large"
           >
