@@ -44,12 +44,12 @@ https://youtu.be/nQWFO5Jzp6U
     - https://stackoverflow.com/questions/21655774/can-i-access-other-google-users-calendars-through-the-google-api-v3
     - https://developers.google.com/identity/protocols/oauth2/service-account
     - https://developers.google.com/admin-sdk/directory/v1/reference/users/list
-
+- EXPRESS_PROXY_URI
+    - a solution to the CORS issue
 
 ## Todo
 
 - Support Google calendar in addition to Outlook calendar.
-- Do not rely on external lambda service
 - Create a new RC app with proper permissions
 - Prompt to enable Google calendar/admin API
 - Handle exception cases

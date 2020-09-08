@@ -103,13 +103,11 @@ const store = SubX.proxy<StoreType>({
   async migrate() {
     if (client && !googleCredentials) {
       // outlook migrate
-      console.log('outlook migrate');
-      // await this.outlookMigrate();
+      await this.outlookMigrate();
     }
     if (!client && googleCredentials) {
       // google migrate
-      console.log('google migrate');
-      // await this.googleMigrate();
+      await this.googleMigrate();
     }
   },
   async outlookMigrate() {
