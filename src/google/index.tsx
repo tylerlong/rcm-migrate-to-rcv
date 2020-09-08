@@ -17,7 +17,7 @@ const onFinish = (values: {adminEmail: string; keyFile: string}) => {
   const keyFile = (document.getElementById('keyFile') as HTMLInputElement)
     .files![0];
   const reader = new FileReader();
-  reader.onload = function (event) {
+  reader.onload = event => {
     const keyJson = JSON.parse(event.target!.result as string);
     const clientEmail = keyJson.client_email;
     const privateKey = keyJson.private_key;
