@@ -1,6 +1,6 @@
 import React from 'react';
 import {Component} from 'react-subx';
-import {Button, Divider} from 'antd';
+import {Button, Divider, Steps} from 'antd';
 
 import {StoreType} from './store';
 
@@ -21,25 +21,55 @@ class App extends Component<PropsStore> {
 
         <Divider />
 
-        <h2>Step #1</h2>
-        <Button onClick={() => store.loginMicrosoft()} type="primary">
-          Authorize this app to access your Outlook Calendar
-        </Button>
+        <Steps current={store.currentStep}>
+          <Steps.Step title="Step 1" subTitle="Calendar Authorization" />
+          <Steps.Step title="Step 2" subTitle="RingCentral Authorization" />
+          <Steps.Step title="Step 3" subTitle="Migrate to RingCentral Video" />
+        </Steps>
 
         <Divider />
 
-        <h2>Step #2</h2>
-        <Button onClick={() => store.loginRingCentral()} type="primary">
-          Authorize this app to access your RCV account.
-        </Button>
-
-        <Divider />
-
-        <h2>Step #3</h2>
-        <Button onClick={() => store.migrate()} type="primary">
-          Migrate your RCM meetings to RCV meetings
-        </Button>
+        {
+          [
+            <CalendarAuthorization store={store} key="0" />,
+            <RingCentralAuthorization store={store} key="1" />,
+            <RcvMigration store={store} key="2" />,
+          ][store.currentStep]
+        }
       </>
+    );
+  }
+}
+
+class CalendarAuthorization extends Component<PropsStore> {
+  render() {
+    const store = this.props.store;
+    return (
+      <Button onClick={() => store.loginMicrosoft()} type="primary">
+        Authorize this app to access your Outlook Calendar
+      </Button>
+    );
+  }
+}
+
+class RingCentralAuthorization extends Component<PropsStore> {
+  render() {
+    const store = this.props.store;
+    return (
+      <Button onClick={() => store.loginRingCentral()} type="primary">
+        Authorize this app to access your RCV account.
+      </Button>
+    );
+  }
+}
+
+class RcvMigration extends Component<PropsStore> {
+  render() {
+    const store = this.props.store;
+    return (
+      <Button onClick={() => store.migrate()} type="primary">
+        Migrate your RCM meetings to RCV meetings
+      </Button>
     );
   }
 }

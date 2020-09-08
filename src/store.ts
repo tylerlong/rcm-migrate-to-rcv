@@ -21,8 +21,10 @@ export type StoreType = {
   loginMicrosoft: Function;
   loginRingCentral: Function;
   migrate: Function;
+  currentStep: number;
 };
 const store = SubX.proxy<StoreType>({
+  currentStep: 0,
   async loginMicrosoft() {
     const authorizeUri = URI('https://login.microsoftonline.com')
       .directory('/common/adminconsent')
@@ -48,7 +50,8 @@ const store = SubX.proxy<StoreType>({
           },
         });
         window.focus();
-        message.success('Step #1 is done, please continue to step #2.', 5);
+        message.success('Authorization to Calendar is done', 5);
+        this.currentStep = 1;
       }
     });
   },
@@ -64,7 +67,8 @@ const store = SubX.proxy<StoreType>({
       if (e.data.message === 'rcAuthorizeSuccess') {
         rc.token = {access_token: e.data.accessToken};
         window.focus();
-        message.success('Step #2 is done, please continue to step #3.', 5);
+        message.success('Authorization to RingCentral is done', 5);
+        this.currentStep = 2;
       }
     });
   },
@@ -115,10 +119,7 @@ const store = SubX.proxy<StoreType>({
           });
       }
     }
-    message.success(
-      'Congratulations, migration is done, please check Outlook calendars.',
-      5
-    );
+    message.success('Congratulations, migration is done.', 5);
   },
 });
 
