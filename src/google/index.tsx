@@ -12,7 +12,7 @@ const tailLayout = {
   wrapperCol: {offset: 8, span: 8},
 };
 
-const onFinish = (values: any) => {
+const onFinish = (values: {adminEmail: string; keyFile: string}) => {
   console.log('Success:', values);
 };
 
@@ -32,7 +32,10 @@ class App extends React.Component {
               {
                 required: true,
                 message: 'Please input admin email!',
+              },
+              {
                 pattern: /^\S+@\S+$/,
+                message: 'Please input valid email!',
               },
             ]}
             extra="Google G Suite admin email address"
@@ -43,10 +46,19 @@ class App extends React.Component {
           <Form.Item
             label="Service Account key file"
             name="keyFile"
-            rules={[{required: true, message: 'Please specify the key file!'}]}
+            rules={[
+              {
+                required: true,
+                message: 'Please specify the key file!',
+              },
+              {
+                pattern: /^.+?\.json$/,
+                message: 'It must be a json file!',
+              },
+            ]}
             extra="Follow instructions below to configure and generate the key file"
           >
-            <Input type="file" />
+            <Input type="file" accept="application/json" />
           </Form.Item>
 
           <Form.Item {...tailLayout}>
@@ -65,36 +77,34 @@ class App extends React.Component {
             this page
           </a>{' '}
           to perform the following tasks:
-          <ul>
-            <li>
-              <a href="https://developers.google.com/identity/protocols/oauth2/service-account#creatinganaccount">
-                Creating a service account
-              </a>
-              <ul>
-                <li>
-                  Do not forget to create a key and download the json key file
-                  and specify it in the form above.
-                </li>
-              </ul>
-            </li>
-            <li>
-              <a href="https://developers.google.com/identity/protocols/oauth2/service-account#delegatingauthority">
-                Delegating domain-wide authority to the service account
-              </a>
-              <ul>
-                <li>
-                  For OAuth scopes, please specify:
-                  <ul>
-                    <li>
-                      https://www.googleapis.com/auth/admin.directory.user
-                    </li>
-                    <li>https://www.googleapis.com/auth/calendar</li>
-                  </ul>
-                </li>
-              </ul>
-            </li>
-          </ul>
         </p>
+        <ul>
+          <li>
+            <a href="https://developers.google.com/identity/protocols/oauth2/service-account#creatinganaccount">
+              Creating a service account
+            </a>
+            <ul>
+              <li>
+                Do not forget to create a key and download the json key file and
+                specify it in the form above.
+              </li>
+            </ul>
+          </li>
+          <li>
+            <a href="https://developers.google.com/identity/protocols/oauth2/service-account#delegatingauthority">
+              Delegating domain-wide authority to the service account
+            </a>
+            <ul>
+              <li>
+                For OAuth scopes, please specify:
+                <ul>
+                  <li>https://www.googleapis.com/auth/admin.directory.user</li>
+                  <li>https://www.googleapis.com/auth/calendar</li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
       </>
     );
   }
