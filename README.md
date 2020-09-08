@@ -51,3 +51,4 @@ https://youtu.be/nQWFO5Jzp6U
 - Support Google calendar in addition to Outlook calendar.
 - Do not rely on external lambda service
 - Create a new RC app with proper permissions
+- Prompt to enable Google calendar/admin API
