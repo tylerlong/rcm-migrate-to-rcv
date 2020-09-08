@@ -17,6 +17,12 @@ rc.installExtension(authorizeUriExtension);
 
 let client: graph.Client;
 
+let googleCredentials: {
+  adminEmail: string;
+  clientEmail: string;
+  privateKey: string;
+};
+
 export type StoreType = {
   currentStep: number;
   done: boolean;
@@ -24,6 +30,8 @@ export type StoreType = {
   loginGoogle: Function;
   loginRingCentral: Function;
   migrate: Function;
+  outlookMigrate: Function;
+  googleMigrate: Function;
   restart: Function;
 };
 const store = SubX.proxy<StoreType>({
@@ -68,7 +76,7 @@ const store = SubX.proxy<StoreType>({
     window.addEventListener('message', async e => {
       if (e.data.message === 'googleAuthorizeSuccess') {
         const {adminEmail, clientEmail, privateKey} = e.data;
-        console.log(adminEmail, clientEmail, privateKey);
+        googleCredentials = {adminEmail, clientEmail, privateKey};
         window.focus();
         message.success('Authorization to Google Calendar is done', 5);
         this.currentStep = 1;
@@ -93,6 +101,18 @@ const store = SubX.proxy<StoreType>({
     });
   },
   async migrate() {
+    if (client && !googleCredentials) {
+      // outlook migrate
+      console.log('outlook migrate');
+      // await this.outlookMigrate();
+    }
+    if (!client && googleCredentials) {
+      // google migrate
+      console.log('google migrate');
+      // await this.googleMigrate();
+    }
+  },
+  async outlookMigrate() {
     let r = await client.api('/users').get();
     console.log(r);
     for (const user of r.value) {
@@ -142,6 +162,7 @@ const store = SubX.proxy<StoreType>({
     message.success('Congratulations, migration is done.', 5);
     this.done = true;
   },
+  async googleMigrate() {},
   restart() {
     this.currentStep = 0;
     this.done = false;

@@ -52,3 +52,12 @@ https://youtu.be/nQWFO5Jzp6U
 - Do not rely on external lambda service
 - Create a new RC app with proper permissions
 - Prompt to enable Google calendar/admin API
+- Handle exception cases
+    - Google
+        - wrong key file
+        - revoked key file
+        - wrong admin email
+    - MS
+        - authorization cancelled
+    - RC
+        - authorization cancelled
