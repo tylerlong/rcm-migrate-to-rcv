@@ -13,10 +13,10 @@ class App extends Component<PropsStore> {
     const store = this.props.store;
     return (
       <>
-        <h1>RCM migrate to RCV</h1>
+        <h1>RCM to RCV migration tool</h1>
         <p>
-          If there are lots of RCM meetings in your Outlook Calendar, use this
-          tool to migrate them to RCV meetings.
+          If you are an Office 365 admin or a Google G Suite admin, use this
+          tool to update everybody&#39;s calendar to replace RCM with RCV.
         </p>
 
         <Divider />

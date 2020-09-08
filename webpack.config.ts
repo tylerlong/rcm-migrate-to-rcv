@@ -51,7 +51,7 @@ const createConfig = (configOptions: ConfigOptions) => {
 
 const mainConfig = createConfig({
   fileName: 'index',
-  pageTitle: 'RCM migrate to RCV',
+  pageTitle: 'RCM to RCV migration tool',
   entryFile: './src/index.tsx',
 });
 
