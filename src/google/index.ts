@@ -2,35 +2,19 @@ import {google} from 'googleapis';
 import path from 'path';
 import fs from 'fs';
 
+import {rcmMeetingRegex, getGoogleAuth} from '../utils';
+
 const googleAdminEmail = 'tylerliu@chuntaoliu.com';
-
-const scopes = [
-  'https://www.googleapis.com/auth/admin.directory.user',
-  'https://www.googleapis.com/auth/calendar',
-];
-
-const rcmMeetingRegex = /https:\/\/meetings\.ringcentral\.com\/j\/\d+/;
 
 const credentials = JSON.parse(
   fs.readFileSync(path.join(__dirname, 'service-account.json'), 'utf8')
 );
 
-const getGoogleAuth = (subject = googleAdminEmail) => {
-  return new google.auth.GoogleAuth({
-    scopes,
-    credentials: {
-      client_email: credentials.client_email,
-      private_key: credentials.private_key,
-    },
-    clientOptions: {subject},
-  });
-};
-
 (async () => {
   const r1 = await google
     .admin({
       version: 'directory_v1',
-      auth: getGoogleAuth(googleAdminEmail),
+      auth: getGoogleAuth(credentials, googleAdminEmail),
     })
     .users.list({
       customer: 'my_customer',
@@ -40,7 +24,7 @@ const getGoogleAuth = (subject = googleAdminEmail) => {
   for (const user of r1.data.users ?? []) {
     const calendar = google.calendar({
       version: 'v3',
-      auth: getGoogleAuth(user.primaryEmail!),
+      auth: getGoogleAuth(credentials, user.primaryEmail!),
     });
     const r2 = await calendar.events.list({calendarId: 'primary'});
     console.log(JSON.stringify(r2.data, null, 2));

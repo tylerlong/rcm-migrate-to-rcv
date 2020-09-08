@@ -5,13 +5,14 @@ import RingCentral from '@rc-ex/core';
 import localforage from 'localforage';
 import AuthorizeUriExtension from '@rc-ex/authorize-uri';
 import URI from 'urijs';
+import {google} from 'googleapis';
 
-const redirectUri = window.location.origin + window.location.pathname;
+import {redirectUri, rcmMeetingRegex, getGoogleAuth} from './utils';
+
 const rc = new RingCentral({
   server: process.env.RINGCENTRAL_SERVER_URL,
   clientId: process.env.RINGCENTRAL_CLIENT_ID,
 });
-
 const authorizeUriExtension = new AuthorizeUriExtension();
 rc.installExtension(authorizeUriExtension);
 
@@ -122,13 +123,9 @@ const store = SubX.proxy<StoreType>({
         (e: {isOrganizer: boolean}) => e.isOrganizer
       );
       for (const event of events) {
-        let match = event.bodyPreview.match(
-          /https:\/\/meetings\.ringcentral\.com\/j\/\d+/
-        );
+        let match = event.bodyPreview.match(rcmMeetingRegex);
         if (match === null) {
-          match = event.location.displayName.match(
-            /https:\/\/meetings\.ringcentral\.com\/j\/\d+/
-          );
+          match = event.location.displayName.match(rcmMeetingRegex);
           if (match === null) {
             continue;
           }
@@ -160,7 +157,45 @@ const store = SubX.proxy<StoreType>({
     message.success('Congratulations, migration is done.', 5);
     this.done = true;
   },
-  async googleMigrate() {},
+  async googleMigrate() {
+    const credentialsParam = {
+      client_email: googleCredentials.clientEmail,
+      private_key: googleCredentials.privateKey,
+    };
+    const r1 = await google
+      .admin({
+        version: 'directory_v1',
+        auth: getGoogleAuth(credentialsParam, googleCredentials.adminEmail),
+      })
+      .users.list({
+        customer: 'my_customer',
+      });
+    console.log(JSON.stringify(r1.data, null, 2));
+
+    for (const user of r1.data.users ?? []) {
+      const calendar = google.calendar({
+        version: 'v3',
+        auth: getGoogleAuth(credentialsParam, user.primaryEmail!),
+      });
+      const r2 = await calendar.events.list({calendarId: 'primary'});
+      console.log(JSON.stringify(r2.data, null, 2));
+      const events = r2.data.items?.filter(
+        (item: any) => item.organizer?.self === true
+      );
+      for (const event of events ?? []) {
+        let match = event.location?.match(rcmMeetingRegex);
+        if (match === null) {
+          match = event.description?.match(rcmMeetingRegex);
+        }
+        if (match !== null) {
+          console.log('Found a match:', JSON.stringify(event, null, 2));
+          // todo: update this event
+        }
+      }
+    }
+    message.success('Congratulations, migration is done.', 5);
+    this.done = true;
+  },
   restart() {
     this.currentStep = 0;
     this.done = false;
