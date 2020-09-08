@@ -24,7 +24,7 @@ class App extends Component<PropsStore> {
         <Steps current={store.currentStep}>
           <Steps.Step title="Calendar Authorization" />
           <Steps.Step title="RingCentral Authorization" />
-          <Steps.Step title="Migrate to RCV" />
+          <Steps.Step title="Migration to RCV" />
         </Steps>
 
         <Divider />

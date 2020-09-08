@@ -2,6 +2,8 @@ import {google} from 'googleapis';
 import path from 'path';
 import fs from 'fs';
 
+const googleAdminEmail = 'tylerliu@chuntaoliu.com';
+
 const scopes = [
   'https://www.googleapis.com/auth/admin.directory.user',
   'https://www.googleapis.com/auth/calendar',
@@ -13,7 +15,7 @@ const credentials = JSON.parse(
   fs.readFileSync(path.join(__dirname, 'service-account.json'), 'utf8')
 );
 
-const getGoogleAuth = (subject = 'tylerliu@chuntaoliu.com') => {
+const getGoogleAuth = (subject = googleAdminEmail) => {
   return new google.auth.GoogleAuth({
     scopes,
     credentials: {
@@ -28,7 +30,7 @@ const getGoogleAuth = (subject = 'tylerliu@chuntaoliu.com') => {
   const r1 = await google
     .admin({
       version: 'directory_v1',
-      auth: getGoogleAuth('tylerliu@chuntaoliu.com'),
+      auth: getGoogleAuth(googleAdminEmail),
     })
     .users.list({
       customer: 'my_customer',
