@@ -1,8 +1,8 @@
-import {google} from 'googleapis';
 import path from 'path';
 import fs from 'fs';
+import axios from 'axios';
 
-import {rcmMeetingRegex, getGoogleAuth} from '../utils';
+import {rcmMeetingRegex} from '../utils';
 
 const googleAdminEmail = 'tylerliu@chuntaoliu.com';
 
@@ -11,24 +11,29 @@ const credentials = JSON.parse(
 );
 
 (async () => {
-  const r1 = await google
-    .admin({
-      version: 'directory_v1',
-      auth: getGoogleAuth(credentials, googleAdminEmail),
-    })
-    .users.list({
-      customer: 'my_customer',
-    });
+  const r1 = await axios.post(
+    process.env.EXPRESS_PROXY_URI + 'google/admin/users/list',
+    {
+      privateKey: credentials.private_key,
+      clientEmail: credentials.client_email,
+      subjectEmail: googleAdminEmail,
+    }
+  );
   console.log(JSON.stringify(r1.data, null, 2));
 
   for (const user of r1.data.users ?? []) {
-    const calendar = google.calendar({
-      version: 'v3',
-      auth: getGoogleAuth(credentials, user.primaryEmail!),
-    });
-    const r2 = await calendar.events.list({calendarId: 'primary'});
+    const r2 = await axios.post(
+      process.env.EXPRESS_PROXY_URI + 'google/calendar/events/list',
+      {
+        privateKey: credentials.private_key,
+        clientEmail: credentials.client_email,
+        subjectEmail: user.primaryEmail,
+      }
+    );
     console.log(JSON.stringify(r2.data, null, 2));
-    const events = r2.data.items?.filter(i => i.organizer?.self === true);
+    const events = r2.data.items?.filter(
+      (item: any) => item.organizer?.self === true
+    );
     for (const event of events ?? []) {
       let match = event.location?.match(rcmMeetingRegex);
       if (match === null) {

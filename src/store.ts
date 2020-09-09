@@ -5,9 +5,9 @@ import RingCentral from '@rc-ex/core';
 import localforage from 'localforage';
 import AuthorizeUriExtension from '@rc-ex/authorize-uri';
 import URI from 'urijs';
-import {google} from 'googleapis';
+import axios from 'axios';
 
-import {redirectUri, rcmMeetingRegex, getGoogleAuth} from './utils';
+import {redirectUri, rcmMeetingRegex} from './utils';
 
 const rc = new RingCentral({
   server: process.env.RINGCENTRAL_SERVER_URL,
@@ -158,26 +158,23 @@ const store = SubX.proxy<StoreType>({
     this.done = true;
   },
   async googleMigrate() {
-    const credentialsParam = {
-      client_email: googleCredentials.clientEmail,
-      private_key: googleCredentials.privateKey,
-    };
-    const r1 = await google
-      .admin({
-        version: 'directory_v1',
-        auth: getGoogleAuth(credentialsParam, googleCredentials.adminEmail),
-      })
-      .users.list({
-        customer: 'my_customer',
-      });
+    const r1 = await axios.post(
+      process.env.EXPRESS_PROXY_URI + 'google/admin/users/list',
+      {
+        ...googleCredentials,
+        subjectEmail: googleCredentials.adminEmail,
+      }
+    );
     console.log(JSON.stringify(r1.data, null, 2));
 
     for (const user of r1.data.users ?? []) {
-      const calendar = google.calendar({
-        version: 'v3',
-        auth: getGoogleAuth(credentialsParam, user.primaryEmail!),
-      });
-      const r2 = await calendar.events.list({calendarId: 'primary'});
+      const r2 = await axios.post(
+        process.env.EXPRESS_PROXY_URI + 'google/calendar/events/list',
+        {
+          ...googleCredentials,
+          subjectEmail: user.primaryEmail,
+        }
+      );
       console.log(JSON.stringify(r2.data, null, 2));
       const events = r2.data.items?.filter(
         (item: any) => item.organizer?.self === true
