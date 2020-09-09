@@ -182,8 +182,13 @@ const store = SubX.proxy<StoreType>({
       }
     );
     console.log(JSON.stringify(r1.data, null, 2));
+    if (r1.data.exception) {
+      message.error(`${r1.data.status}: ${JSON.stringify(r1.data.data)}`, 300);
+      this.pendingText = '';
+      return;
+    }
 
-    for (const user of r1.data.users ?? []) {
+    for (const user of r1.data.data.users ?? []) {
       const r2 = await axios.post(
         process.env.EXPRESS_PROXY_URI + 'google/calendar/events/list',
         {
@@ -197,7 +202,15 @@ const store = SubX.proxy<StoreType>({
         }
       );
       console.log(JSON.stringify(r2.data, null, 2));
-      const events = r2.data.items?.filter(
+      if (r2.data.exception) {
+        message.error(
+          `${r2.data.status}: ${JSON.stringify(r2.data.data)}`,
+          300
+        );
+        this.pendingText = '';
+        return;
+      }
+      const events = r2.data.data.items?.filter(
         (item: any) => item.organizer?.self === true
       );
       for (const event of events ?? []) {
@@ -237,6 +250,14 @@ const store = SubX.proxy<StoreType>({
           }
         );
         console.log(JSON.stringify(r3.data, null, 2));
+        if (r3.data.exception) {
+          message.error(
+            `${r3.data.status}: ${JSON.stringify(r3.data.data)}`,
+            300
+          );
+          this.pendingText = '';
+          return;
+        }
       }
     }
     message.success('Congratulations, migration is done.', 5);
