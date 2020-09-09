@@ -141,14 +141,13 @@ const store = SubX.proxy<StoreType>({
           .api(`/users/${user.userPrincipalName}/calendar/events/${event.id}`)
           .patch({
             body: {
-              content: event.bodyPreview.replace(rcmUri, meeting.joinUri),
+              content: event.bodyPreview.split(rcmUri).join(meeting.joinUri),
               contentType: 'text',
             },
             location: {
-              displayName: event.location.displayName.replace(
-                rcmUri,
-                meeting.joinUri
-              ),
+              displayName: event.location.displayName
+                .split(rcmUri)
+                .join(meeting.joinUri),
               locationType: 'default',
             },
           });

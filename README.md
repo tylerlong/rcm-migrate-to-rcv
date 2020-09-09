@@ -1,6 +1,6 @@
 # RCM to RCV migration tool
 
-This is a tool for Office 365 admin or Google G Suite admin. 
+This tool is for Office 365 admin or Google G Suite admin. 
 If you organization is currently using RCM, use this tool to migrate to RCV.
 
 
@@ -44,7 +44,6 @@ https://youtu.be/nQWFO5Jzp6U
 
 ## Todo
 
-- Create a new RC app with proper permissions
 - Prompt to enable Google calendar/admin API
 - Handle exception cases
     - Google
@@ -57,3 +56,5 @@ https://youtu.be/nQWFO5Jzp6U
         - authorization cancelled
 - Display migration progress
     - as a minimum, show a spinner
+- RCV Meeting with password?
+- Refactor code
