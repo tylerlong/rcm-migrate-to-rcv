@@ -62,3 +62,4 @@ https://youtu.be/nQWFO5Jzp6U
     - RC
         - authorization cancelled
 - Display migration progress
+    - as a minimum, show a spinner

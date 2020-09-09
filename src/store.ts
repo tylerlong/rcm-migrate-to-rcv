@@ -161,8 +161,13 @@ const store = SubX.proxy<StoreType>({
     const r1 = await axios.post(
       process.env.EXPRESS_PROXY_URI + 'google/admin/users/list',
       {
-        ...googleCredentials,
-        subjectEmail: googleCredentials.adminEmail,
+        auth: {
+          ...googleCredentials,
+          subjectEmail: googleCredentials.adminEmail,
+        },
+        body: {
+          customer: 'my_customer',
+        },
       }
     );
     console.log(JSON.stringify(r1.data, null, 2));
@@ -171,8 +176,13 @@ const store = SubX.proxy<StoreType>({
       const r2 = await axios.post(
         process.env.EXPRESS_PROXY_URI + 'google/calendar/events/list',
         {
-          ...googleCredentials,
-          subjectEmail: user.primaryEmail,
+          auth: {
+            ...googleCredentials,
+            subjectEmail: user.primaryEmail,
+          },
+          body: {
+            calendarId: 'primary',
+          },
         }
       );
       console.log(JSON.stringify(r2.data, null, 2));
@@ -186,7 +196,24 @@ const store = SubX.proxy<StoreType>({
         }
         if (match !== null) {
           console.log('Found a match:', JSON.stringify(event, null, 2));
-          // todo: update this event
+          const r3 = await axios.post(
+            process.env.EXPRESS_PROXY_URI + 'google/calendar/events/patch',
+            {
+              auth: {
+                ...googleCredentials,
+                subjectEmail: user.primaryEmail,
+              },
+              body: {
+                calendarId: 'primary',
+                eventId: event.id!,
+                requestBody: {
+                  location: event.location + ' 8',
+                  description: event.description + ' 8',
+                },
+              },
+            }
+          );
+          console.log(JSON.stringify(r3.data, null, 2));
         }
       }
     }
