@@ -46,7 +46,7 @@ https://youtu.be/nQWFO5Jzp6U
 ## Todo
 
 - Schedule RCV meeting use the current Calendar user's RingCentral extension
-    -  What if he/she doesn't have an RingCentral extension?
+    -  What if he/she doesn't have a RingCentral extension?
     -  What if his/her calendar email is different from his/her RingCentral profile email?
 - RCV Meeting with password?
 - Refactor code
