@@ -16,13 +16,15 @@ const rc = new RingCentral({
 const authorizeUriExtension = new AuthorizeUriExtension();
 rc.installExtension(authorizeUriExtension);
 
-let client: graph.Client;
+let client: graph.Client | undefined = undefined;
 
-let googleCredentials: {
-  adminEmail: string;
-  clientEmail: string;
-  privateKey: string;
-};
+let googleCredentials:
+  | {
+      adminEmail: string;
+      clientEmail: string;
+      privateKey: string;
+    }
+  | undefined = undefined;
 
 export type StoreType = {
   currentStep: number;
@@ -52,7 +54,7 @@ const store = SubX.proxy<StoreType>({
     const childWindow = window.open(
       authorizeUri,
       'Login Microsoft',
-      'width=800,height=600'
+      'width=600,height=700'
     );
     const messageListener = async (e: MessageEvent) => {
       if (e.data.message === 'msAuthorizeFailure') {
@@ -90,7 +92,7 @@ const store = SubX.proxy<StoreType>({
     const childWindow = window.open(
       redirectUri + 'google.html',
       'Login Google',
-      'width=800,height=600'
+      'width=600,height=700'
     );
     const messageListener = async (e: MessageEvent) => {
       if (e.data.message === 'googleAuthorizeSuccess') {
@@ -122,7 +124,7 @@ const store = SubX.proxy<StoreType>({
     const childWindow = window.open(
       authorizeUri,
       'Login RingCentral',
-      'width=800,height=600'
+      'width=600,height=700'
     );
     const messageListener = async (e: MessageEvent) => {
       if (e.data.message === 'rcAuthorizeSuccess') {
@@ -154,10 +156,10 @@ const store = SubX.proxy<StoreType>({
     }
   },
   async outlookMigrate() {
-    let r = await client.api('/users').get();
+    let r = await client!.api('/users').get();
     console.log(r);
     for (const user of r.value) {
-      r = await client
+      r = await client!
         .api(`/users/${user.userPrincipalName}/calendar/events`)
         .get();
       console.log(r);
@@ -180,7 +182,7 @@ const store = SubX.proxy<StoreType>({
           })
         ).data;
         this.pendingText = `Doing migration for Outlook user ${user.displayName}`;
-        await client
+        await client!
           .api(`/users/${user.userPrincipalName}/calendar/events/${event.id}`)
           .patch({
             body: {
@@ -198,6 +200,7 @@ const store = SubX.proxy<StoreType>({
     }
     message.success('Congratulations, migration is done.', 5);
     this.done = true;
+    client = undefined;
     this.pendingText = '';
   },
   async googleMigrate() {
@@ -206,7 +209,7 @@ const store = SubX.proxy<StoreType>({
       {
         auth: {
           ...googleCredentials,
-          subjectEmail: googleCredentials.adminEmail,
+          subjectEmail: googleCredentials!.adminEmail,
         },
         body: {
           customer: 'my_customer',
@@ -294,6 +297,7 @@ const store = SubX.proxy<StoreType>({
     }
     message.success('Congratulations, migration is done.', 5);
     this.done = true;
+    googleCredentials = undefined;
     this.pendingText = '';
   },
   restart() {
