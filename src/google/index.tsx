@@ -88,14 +88,22 @@ class App extends React.Component {
         <h2>Instructions</h2>
         <p>
           Please follow instructions on{' '}
-          <a href="https://developers.google.com/identity/protocols/oauth2/service-account">
+          <a
+            href="https://developers.google.com/identity/protocols/oauth2/service-account"
+            target="_blank"
+            rel="noreferrer"
+          >
             this page
           </a>{' '}
           to perform the following tasks:
         </p>
         <ul>
           <li>
-            <a href="https://developers.google.com/identity/protocols/oauth2/service-account#creatinganaccount">
+            <a
+              href="https://developers.google.com/identity/protocols/oauth2/service-account#creatinganaccount"
+              target="_blank"
+              rel="noreferrer"
+            >
               Creating a service account
             </a>
             <ul>
@@ -106,7 +114,11 @@ class App extends React.Component {
             </ul>
           </li>
           <li>
-            <a href="https://developers.google.com/identity/protocols/oauth2/service-account#delegatingauthority">
+            <a
+              href="https://developers.google.com/identity/protocols/oauth2/service-account#delegatingauthority"
+              target="_blank"
+              rel="noreferrer"
+            >
               Delegating domain-wide authority to the service account
             </a>
             <ul>
