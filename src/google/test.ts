@@ -1,3 +1,4 @@
+// eslint-disable-next-line node/no-unpublished-import
 import {google} from 'googleapis';
 import path from 'path';
 import fs from 'fs';

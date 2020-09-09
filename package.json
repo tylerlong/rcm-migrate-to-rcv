@@ -4,7 +4,7 @@
     "node": ">=14"
   },
   "scripts": {
-    "test": "ts-node -r dotenv-override-true/config src/google/index.ts",
+    "test": "ts-node -r dotenv-override-true/config src/google/test.ts",
     "start": "webpack-dev-server --progress --colors",
     "build": "webpack --progress --colors"
   },
