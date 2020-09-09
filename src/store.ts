@@ -194,27 +194,37 @@ const store = SubX.proxy<StoreType>({
         if (match === null) {
           match = event.description?.match(rcmMeetingRegex);
         }
-        if (match !== null) {
-          console.log('Found a match:', JSON.stringify(event, null, 2));
-          const r3 = await axios.post(
-            process.env.EXPRESS_PROXY_URI + 'google/calendar/events/patch',
-            {
-              auth: {
-                ...googleCredentials,
-                subjectEmail: user.primaryEmail,
-              },
-              body: {
-                calendarId: 'primary',
-                eventId: event.id!,
-                requestBody: {
-                  location: event.location + ' 8',
-                  description: event.description + ' 8',
-                },
-              },
-            }
-          );
-          console.log(JSON.stringify(r3.data, null, 2));
+        if (match === null) {
+          continue;
         }
+        console.log('Found a match:', JSON.stringify(event, null, 2));
+        const rcmUri = match[0];
+        const meeting = (
+          await rc.post('/rcvideo/v1/bridges', {
+            expiresIn: 3600 * 24 * 365,
+            type: 0,
+          })
+        ).data;
+        const r3 = await axios.post(
+          process.env.EXPRESS_PROXY_URI + 'google/calendar/events/patch',
+          {
+            auth: {
+              ...googleCredentials,
+              subjectEmail: user.primaryEmail,
+            },
+            body: {
+              calendarId: 'primary',
+              eventId: event.id!,
+              requestBody: {
+                location: event.location.split(rcmUri).join(meeting.joinUri),
+                description: event.description
+                  .split(rcmUri)
+                  .join(meeting.joinUri),
+              },
+            },
+          }
+        );
+        console.log(JSON.stringify(r3.data, null, 2));
       }
     }
     message.success('Congratulations, migration is done.', 5);
