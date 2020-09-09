@@ -27,7 +27,7 @@ let googleCredentials: {
 export type StoreType = {
   currentStep: number;
   done: boolean;
-  pending: boolean;
+  pendingText: string;
   loginMicrosoft: Function;
   loginGoogle: Function;
   loginRingCentral: Function;
@@ -39,9 +39,9 @@ export type StoreType = {
 const store = SubX.proxy<StoreType>({
   currentStep: 0,
   done: false,
-  pending: false,
+  pendingText: '',
   async loginMicrosoft() {
-    this.pending = true;
+    this.pendingText = 'Login Microsoft';
     const authorizeUri = URI('https://login.microsoftonline.com')
       .directory('/common/adminconsent')
       .search({
@@ -58,7 +58,7 @@ const store = SubX.proxy<StoreType>({
           errorMessage = `${e.data.error}: ${e.data.errorDescription}`;
         }
         message.error(errorMessage, 300);
-        this.pending = false;
+        this.pendingText = '';
         return;
       } else if (e.data.message === 'msAuthorizeSuccess') {
         client = graph.Client.init({
@@ -69,12 +69,12 @@ const store = SubX.proxy<StoreType>({
         window.focus();
         message.success('Authorization to Outlook Calendar is done', 5);
         this.currentStep = 1;
-        this.pending = false;
+        this.pendingText = '';
       }
     });
   },
   async loginGoogle() {
-    this.pending = true;
+    this.pendingText = 'Login Google';
     window.open(
       redirectUri + 'google.html',
       'Login Google',
@@ -87,12 +87,12 @@ const store = SubX.proxy<StoreType>({
         window.focus();
         message.success('Authorization to Google Calendar is done', 5);
         this.currentStep = 1;
-        this.pending = false;
+        this.pendingText = '';
       }
     });
   },
   async loginRingCentral() {
-    this.pending = true;
+    this.pendingText = 'Login RingCentral';
     const authorizeUri = authorizeUriExtension.buildUri({
       redirect_uri: redirectUri + 'ringcentral.html',
       code_challenge_method: 'S256',
@@ -106,12 +106,12 @@ const store = SubX.proxy<StoreType>({
         window.focus();
         message.success('Authorization to RingCentral is done', 5);
         this.currentStep = 2;
-        this.pending = false;
+        this.pendingText = '';
       }
     });
   },
   async migrate() {
-    this.pending = true;
+    this.pendingText = 'Migration in progress';
     if (client && !googleCredentials) {
       // outlook migrate
       await this.outlookMigrate();
@@ -165,7 +165,7 @@ const store = SubX.proxy<StoreType>({
     }
     message.success('Congratulations, migration is done.', 5);
     this.done = true;
-    this.pending = false;
+    this.pendingText = '';
   },
   async googleMigrate() {
     const r1 = await axios.post(
@@ -239,7 +239,7 @@ const store = SubX.proxy<StoreType>({
     }
     message.success('Congratulations, migration is done.', 5);
     this.done = true;
-    this.pending = false;
+    this.pendingText = '';
   },
   restart() {
     this.currentStep = 0;

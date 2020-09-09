@@ -29,8 +29,12 @@ class App extends Component<PropsStore> {
 
         <Divider />
 
-        {store.pending ? (
-          <Spin size="large" className="middle-button" />
+        {store.pendingText !== '' ? (
+          <>
+            <Spin size="large" className="middle-block" />
+            <p></p>
+            <p className="middle-text">{store.pendingText}</p>
+          </>
         ) : (
           [
             <CalendarAuthorization store={store} key="0" />,
@@ -79,7 +83,7 @@ class RingCentralAuthorization extends Component<PropsStore> {
         onClick={() => store.loginRingCentral()}
         type="primary"
         size="large"
-        className="middle-button"
+        className="middle-block"
       >
         Login as RingCentral user
       </Button>
@@ -99,7 +103,7 @@ class RcvMigration extends Component<PropsStore> {
         onClick={() => store.migrate()}
         type="primary"
         size="large"
-        className="right-button"
+        className="right-float"
       >
         Migrate RCM meetings to RCV meetings
       </Button>
