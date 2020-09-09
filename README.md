@@ -54,7 +54,5 @@ https://youtu.be/nQWFO5Jzp6U
         - authorization cancelled
     - RC
         - authorization cancelled
-- Display migration progress
-    - as a minimum, show a spinner
 - RCV Meeting with password?
 - Refactor code

@@ -147,6 +147,7 @@ const store = SubX.proxy<StoreType>({
             type: 0,
           })
         ).data;
+        this.pendingText = `Doing migration for Outlook user ${user.displayName}`;
         await client
           .api(`/users/${user.userPrincipalName}/calendar/events/${event.id}`)
           .patch({
@@ -215,6 +216,7 @@ const store = SubX.proxy<StoreType>({
             type: 0,
           })
         ).data;
+        this.pendingText = `Doing migration for Google user ${user.name.fullName}`;
         const r3 = await axios.post(
           process.env.EXPRESS_PROXY_URI + 'google/calendar/events/patch',
           {
