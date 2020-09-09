@@ -38,21 +38,15 @@ https://youtu.be/nQWFO5Jzp6U
     - https://docs.microsoft.com/en-us/graph/auth-v2-service
 - Google
     - https://developers.google.com/identity/protocols/oauth2/service-account
-- EXPRESS_PROXY_URI
-    - a solution to workaround the CORS issue
+- https://github.com/tylerlong/express-proxy
+    - a solution to workaround the Microsoft CORS issue
     - Google SDK is node.js only
+
 
 ## Todo
 
-- Prompt to enable Google calendar/admin API
-- Handle exception cases
-    - Google
-        - wrong key file
-        - revoked key file
-        - wrong admin email
-    - MS
-        - authorization cancelled
-    - RC
-        - authorization cancelled
+- Schedule RCV meeting use the current Calendar user's RingCentral extension
+    -  What if he/she doesn't have an RingCentral extension?
+    -  What if his/her calendar email is different from his/her RingCentral profile email?
 - RCV Meeting with password?
 - Refactor code
