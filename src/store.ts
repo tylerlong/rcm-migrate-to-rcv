@@ -49,7 +49,17 @@ const store = SubX.proxy<StoreType>({
         redirect_uri: redirectUri + 'microsoft.html',
       })
       .toString();
-    window.open(authorizeUri, 'Login Microsoft', 'width=800,height=600');
+    const childWindow = window.open(
+      authorizeUri,
+      'Login Microsoft',
+      'width=800,height=600'
+    );
+    const timer = setInterval(() => {
+      if (childWindow?.closed) {
+        clearInterval(timer);
+        this.pendingText = '';
+      }
+    }, 500);
     window.addEventListener('message', async e => {
       if (e.data.message === 'msAuthorizeFailure') {
         let errorMessage =
@@ -75,11 +85,17 @@ const store = SubX.proxy<StoreType>({
   },
   async loginGoogle() {
     this.pendingText = 'Login Google';
-    window.open(
+    const childWindow = window.open(
       redirectUri + 'google.html',
       'Login Google',
       'width=800,height=600'
     );
+    const timer = setInterval(() => {
+      if (childWindow?.closed) {
+        clearInterval(timer);
+        this.pendingText = '';
+      }
+    }, 500);
     window.addEventListener('message', async e => {
       if (e.data.message === 'googleAuthorizeSuccess') {
         const {adminEmail, clientEmail, privateKey} = e.data;
@@ -99,7 +115,17 @@ const store = SubX.proxy<StoreType>({
     });
     const codeVerifier = authorizeUriExtension.codeVerifier;
     await localforage.setItem('code_verifier', codeVerifier);
-    window.open(authorizeUri, 'Login RingCentral', 'width=800,height=600');
+    const childWindow = window.open(
+      authorizeUri,
+      'Login RingCentral',
+      'width=800,height=600'
+    );
+    const timer = setInterval(() => {
+      if (childWindow?.closed) {
+        clearInterval(timer);
+        this.pendingText = '';
+      }
+    }, 500);
     window.addEventListener('message', async e => {
       if (e.data.message === 'rcAuthorizeSuccess') {
         rc.token = {access_token: e.data.accessToken};
