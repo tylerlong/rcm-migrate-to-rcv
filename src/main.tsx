@@ -1,6 +1,6 @@
 import React from 'react';
 import {Component} from 'react-subx';
-import {Button, Divider, Steps, Tabs} from 'antd';
+import {Button, Divider, Steps, Tabs, Spin} from 'antd';
 
 import {StoreType} from './store';
 
@@ -29,13 +29,15 @@ class App extends Component<PropsStore> {
 
         <Divider />
 
-        {
+        {store.pending ? (
+          <Spin size="large" className="middle-button" />
+        ) : (
           [
             <CalendarAuthorization store={store} key="0" />,
             <RingCentralAuthorization store={store} key="1" />,
             <RcvMigration store={store} key="2" />,
           ][store.currentStep]
-        }
+        )}
       </>
     );
   }

@@ -27,6 +27,7 @@ let googleCredentials: {
 export type StoreType = {
   currentStep: number;
   done: boolean;
+  pending: boolean;
   loginMicrosoft: Function;
   loginGoogle: Function;
   loginRingCentral: Function;
@@ -38,7 +39,9 @@ export type StoreType = {
 const store = SubX.proxy<StoreType>({
   currentStep: 0,
   done: false,
+  pending: false,
   async loginMicrosoft() {
+    this.pending = true;
     const authorizeUri = URI('https://login.microsoftonline.com')
       .directory('/common/adminconsent')
       .search({
@@ -55,6 +58,7 @@ const store = SubX.proxy<StoreType>({
           errorMessage = `${e.data.error}: ${e.data.errorDescription}`;
         }
         message.error(errorMessage, 300);
+        this.pending = false;
         return;
       } else if (e.data.message === 'msAuthorizeSuccess') {
         client = graph.Client.init({
@@ -65,10 +69,12 @@ const store = SubX.proxy<StoreType>({
         window.focus();
         message.success('Authorization to Outlook Calendar is done', 5);
         this.currentStep = 1;
+        this.pending = false;
       }
     });
   },
   async loginGoogle() {
+    this.pending = true;
     window.open(
       redirectUri + 'google.html',
       'Login Google',
@@ -81,10 +87,12 @@ const store = SubX.proxy<StoreType>({
         window.focus();
         message.success('Authorization to Google Calendar is done', 5);
         this.currentStep = 1;
+        this.pending = false;
       }
     });
   },
   async loginRingCentral() {
+    this.pending = true;
     const authorizeUri = authorizeUriExtension.buildUri({
       redirect_uri: redirectUri + 'ringcentral.html',
       code_challenge_method: 'S256',
@@ -98,10 +106,12 @@ const store = SubX.proxy<StoreType>({
         window.focus();
         message.success('Authorization to RingCentral is done', 5);
         this.currentStep = 2;
+        this.pending = false;
       }
     });
   },
   async migrate() {
+    this.pending = true;
     if (client && !googleCredentials) {
       // outlook migrate
       await this.outlookMigrate();
@@ -155,6 +165,7 @@ const store = SubX.proxy<StoreType>({
     }
     message.success('Congratulations, migration is done.', 5);
     this.done = true;
+    this.pending = false;
   },
   async googleMigrate() {
     const r1 = await axios.post(
@@ -228,6 +239,7 @@ const store = SubX.proxy<StoreType>({
     }
     message.success('Congratulations, migration is done.', 5);
     this.done = true;
+    this.pending = false;
   },
   restart() {
     this.currentStep = 0;
