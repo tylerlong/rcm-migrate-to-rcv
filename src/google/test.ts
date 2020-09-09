@@ -43,7 +43,14 @@ const getGoogleAuth = (subject = googleAdminEmail) => {
       version: 'v3',
       auth: getGoogleAuth(user.primaryEmail!),
     });
-    const r2 = await calendar.events.list({calendarId: 'primary'});
+    let r2: any;
+    try {
+      r2 = await calendar.events.list({calendarId: 'primary'});
+    } catch (e) {
+      console.log(JSON.stringify(e.response.data, null, 2));
+      console.log(e.response.status);
+      return;
+    }
     console.log(JSON.stringify(r2.data, null, 2));
     const events = r2.data.items?.filter(
       (item: any) => item.organizer?.self === true
