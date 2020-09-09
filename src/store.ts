@@ -54,13 +54,7 @@ const store = SubX.proxy<StoreType>({
       'Login Microsoft',
       'width=800,height=600'
     );
-    const timer = setInterval(() => {
-      if (childWindow?.closed) {
-        clearInterval(timer);
-        this.pendingText = '';
-      }
-    }, 500);
-    window.addEventListener('message', async e => {
+    const messageListener = async (e: MessageEvent) => {
       if (e.data.message === 'msAuthorizeFailure') {
         let errorMessage =
           'Authorization to access Office 365 account failed, please make sure you have admin permission!';
@@ -81,7 +75,15 @@ const store = SubX.proxy<StoreType>({
         this.currentStep = 1;
         this.pendingText = '';
       }
-    });
+    };
+    const timer = setInterval(() => {
+      if (childWindow?.closed) {
+        clearInterval(timer);
+        window.removeEventListener('message', messageListener);
+        this.pendingText = '';
+      }
+    }, 500);
+    window.addEventListener('message', messageListener);
   },
   async loginGoogle() {
     this.pendingText = 'Login Google';
@@ -90,13 +92,7 @@ const store = SubX.proxy<StoreType>({
       'Login Google',
       'width=800,height=600'
     );
-    const timer = setInterval(() => {
-      if (childWindow?.closed) {
-        clearInterval(timer);
-        this.pendingText = '';
-      }
-    }, 500);
-    window.addEventListener('message', async e => {
+    const messageListener = async (e: MessageEvent) => {
       if (e.data.message === 'googleAuthorizeSuccess') {
         const {adminEmail, clientEmail, privateKey} = e.data;
         googleCredentials = {adminEmail, clientEmail, privateKey};
@@ -105,7 +101,15 @@ const store = SubX.proxy<StoreType>({
         this.currentStep = 1;
         this.pendingText = '';
       }
-    });
+    };
+    const timer = setInterval(() => {
+      if (childWindow?.closed) {
+        clearInterval(timer);
+        window.removeEventListener('message', messageListener);
+        this.pendingText = '';
+      }
+    }, 500);
+    window.addEventListener('message', messageListener);
   },
   async loginRingCentral() {
     this.pendingText = 'Login RingCentral';
@@ -120,13 +124,7 @@ const store = SubX.proxy<StoreType>({
       'Login RingCentral',
       'width=800,height=600'
     );
-    const timer = setInterval(() => {
-      if (childWindow?.closed) {
-        clearInterval(timer);
-        this.pendingText = '';
-      }
-    }, 500);
-    window.addEventListener('message', async e => {
+    const messageListener = async (e: MessageEvent) => {
       if (e.data.message === 'rcAuthorizeSuccess') {
         rc.token = {access_token: e.data.accessToken};
         window.focus();
@@ -134,7 +132,15 @@ const store = SubX.proxy<StoreType>({
         this.currentStep = 2;
         this.pendingText = '';
       }
-    });
+    };
+    const timer = setInterval(() => {
+      if (childWindow?.closed) {
+        clearInterval(timer);
+        window.removeEventListener('message', messageListener);
+        this.pendingText = '';
+      }
+    }, 500);
+    window.addEventListener('message', messageListener);
   },
   async migrate() {
     this.pendingText = 'Migration in progress';
