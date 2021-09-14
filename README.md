@@ -1,3 +1,10 @@
+# Deprecated
+
+RingCentral now provides official tool to do the migration. You should always use the official tool. 
+
+For more information, please refer to [this page](https://support.ringcentral.com/transition-to-rcv/admin.html).
+
+
 # RCM to RCV migration tool
 
 This tool is for Office 365 admin or Google G Suite admin. 
